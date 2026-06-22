@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* 韓系可愛點點背景 */
         body {
             background-color: #fffaf0;
             background-image: radial-gradient(#ffd1dc 2px, transparent 2px);
@@ -15,10 +14,7 @@
             font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang TC', 'Heiti TC', 'Microsoft JhengHei', sans-serif;
             scroll-behavior: smooth;
         }
-        /* 隱藏原生滾動條但保持可滾動 */
-        ::-webkit-scrollbar {
-            display: none;
-        }
+        ::-webkit-scrollbar { display: none; }
         .macaron-card {
             background: rgba(255, 255, 255, 0.95);
             box-shadow: 0 10px 25px rgba(255, 182, 193, 0.2);
@@ -34,24 +30,28 @@
         .badge-buy { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); }
         .badge-snap { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); }
         
-        /* Modal 動畫 */
         .modal-enter { animation: slideUp 0.3s ease-out forwards; }
         @keyframes slideUp {
             from { transform: translateY(100%); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
+        
+        /* 隱藏原生 checkbox，使用客製化樣式 */
+        .custom-checkbox input:checked + div {
+            background-color: #fbbf24;
+            color: white;
+            border-color: #fbbf24;
+        }
     </style>
 </head>
 <body class="pb-24 relative">
 
-    <!-- 頂部標題 -->
     <header class="pt-10 pb-6 px-6 text-center">
         <h1 class="text-2xl font-bold text-gray-800 tracking-wider mb-2">✨ 金門小旅行 ✨</h1>
         <p class="text-sm text-gray-500">Day 1 ~ Day 3 專屬行程導覽</p>
     </header>
 
     <main class="px-5 space-y-12">
-        <!-- Day 1 -->
         <section id="day1" class="scroll-mt-8">
             <div class="flex items-center mb-4">
                 <div class="bg-pink-300 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold shadow-md">D1</div>
@@ -123,44 +123,19 @@
                     </div>
                 </div>
 
-                <div class="macaron-card rounded-3xl p-5">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-xs font-bold px-2 py-1 rounded-full tag-spot">景點</span>
-                    </div>
-                    <h3 class="text-lg font-bold text-gray-800">水頭聚落</h3>
-                    <p class="text-sm text-gray-600 mt-2">💡 晚上聚落打燈後，洋樓的剪影非常浪漫，適合拍牽手背影照。</p>
-                </div>
-
                 <div class="macaron-card rounded-3xl p-5 border-l-4 border-l-pink-400">
                     <span class="text-xs font-bold px-2 py-1 rounded-full tag-hotel mb-2 inline-block"><i class="fa-solid fa-bed"></i> 住宿</span>
                     <h3 class="text-lg font-bold text-gray-800">海福商務旅館</h3>
                 </div>
-
-                <div class="bg-pink-50 rounded-2xl p-4 text-sm text-pink-800 shadow-inner">
-                    <p class="mb-1">👗 <strong>建議穿著：</strong> 輕薄透氣夏裝＋好走的休閒鞋，小金門走步道才輕鬆。</p>
-                    <p>☀️ <strong>天氣提示：</strong> 夏日海島紫外線強烈，請瘋狂補防曬與水分！</p>
-                </div>
             </div>
         </section>
 
-        <!-- Day 2 -->
         <section id="day2" class="scroll-mt-8">
             <div class="flex items-center mb-4">
                 <div class="bg-blue-300 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold shadow-md">D2</div>
                 <h2 class="ml-3 text-xl font-bold text-gray-800">06/28 (日) 戰地與浪漫</h2>
             </div>
             <div class="space-y-4">
-                <div class="macaron-card rounded-3xl p-5 relative overflow-hidden">
-                    <div class="flex justify-between items-start mb-2">
-                        <div class="space-x-1">
-                            <span class="text-xs font-bold px-2 py-1 rounded-full tag-food">早餐</span>
-                            <span class="text-xs font-bold px-2 py-1 rounded-full text-white badge-eat shadow-sm">#必吃</span>
-                        </div>
-                    </div>
-                    <h3 class="text-lg font-bold text-gray-800">永春廣東粥</h3>
-                    <p class="text-sm text-gray-600 mt-2">💡 油條沾著無米粥吃是靈魂！記得錄一段油條吸滿湯汁的邪惡畫面。</p>
-                </div>
-
                 <div class="macaron-card rounded-3xl p-5 relative overflow-hidden">
                     <div class="flex justify-between items-start mb-2">
                         <div class="space-x-1">
@@ -171,87 +146,18 @@
                     <h3 class="text-lg font-bold text-gray-800 mb-1">翟山坑道 / 北山、古寧頭</h3>
                     <div class="bg-gray-50 rounded-xl p-3 text-sm text-gray-700">
                         🚗 <span class="font-bold text-blue-500">停車資訊：</span> 坑道外有大型停車場。<br>
-                        💡 <span class="font-bold text-yellow-600">拍照小技巧：</span> 翟山坑道的水面倒影超美，手機貼近水面邊緣拍，可以拍出完美的對稱世界。北山洋樓的彈孔牆，適合拍帶點憂鬱感的人像。
+                        💡 <span class="font-bold text-yellow-600">拍照小技巧：</span> 翟山坑道的水面倒影超美，手機貼近水面邊緣拍，可以拍出完美的對稱世界。
                     </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="macaron-card rounded-3xl p-4">
-                        <span class="text-xs font-bold px-2 py-1 rounded-full tag-food mb-2 inline-block">午餐 11:30</span>
-                        <h3 class="font-bold text-gray-800">喜悅小館</h3>
-                    </div>
-                    <div class="macaron-card rounded-3xl p-4">
-                        <span class="text-xs font-bold px-2 py-1 rounded-full tag-food mb-2 inline-block">下午茶</span>
-                        <h3 class="font-bold text-gray-800">百花洋樓喫茶</h3>
-                    </div>
-                </div>
-
-                <div class="macaron-card rounded-3xl p-5 relative overflow-hidden">
-                    <div class="flex justify-between items-start mb-2">
-                        <div class="space-x-1">
-                            <span class="text-xs font-bold px-2 py-1 rounded-full tag-food">晚餐 18:00</span>
-                            <span class="text-xs font-bold px-2 py-1 rounded-full text-white badge-eat shadow-sm">#必吃</span>
-                        </div>
-                    </div>
-                    <h3 class="text-lg font-bold text-gray-800">記德海鮮餐廳</h3>
-                    <p class="text-sm text-gray-600 mt-2">💡 高粱嗆蟹絕對是主角，拍個大家一起剝螃蟹的開心動態吧！</p>
-                </div>
-
-                <div class="macaron-card rounded-3xl p-5">
-                    <span class="text-xs font-bold px-2 py-1 rounded-full tag-activity mb-2 inline-block">活動</span>
-                    <h3 class="text-lg font-bold text-gray-800">夜遊後浦小鎮</h3>
-                    <p class="text-sm text-gray-600 mt-2">💡 跟著免費導覽員穿梭巷弄，晚上很涼爽，也是聽在地故事的最佳時刻。</p>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="macaron-card rounded-3xl p-4">
-                        <span class="text-xs font-bold px-2 py-1 rounded-full tag-food mb-2 inline-block">宵夜</span>
-                        <h3 class="font-bold text-gray-800">大廟口熱炒</h3>
-                    </div>
-                    <div class="macaron-card rounded-3xl p-4 border-l-4 border-l-pink-400">
-                        <span class="text-xs font-bold px-2 py-1 rounded-full tag-hotel mb-2 inline-block">住宿</span>
-                        <h3 class="font-bold text-gray-800">海福旅館</h3>
-                    </div>
-                </div>
-
-                <div class="bg-blue-50 rounded-2xl p-4 text-sm text-blue-800 shadow-inner">
-                    <p class="mb-1">👗 <strong>建議穿著：</strong> 推薦亮色系洋裝或上衣，在灰暗的坑道與古宅中拍照超級跳色！</p>
-                    <p>☀️ <strong>天氣提示：</strong> 坑道內部陰涼潮濕，稍微怕冷的可以準備一件薄襯衫當外套。</p>
                 </div>
             </div>
         </section>
-
-        <!-- Day 3 -->
+        
         <section id="day3" class="scroll-mt-8 pb-10">
             <div class="flex items-center mb-4">
                 <div class="bg-green-300 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold shadow-md">D3</div>
                 <h2 class="ml-3 text-xl font-bold text-gray-800">06/29 (一) 偽出國風情</h2>
             </div>
             <div class="space-y-4">
-                <div class="macaron-card rounded-3xl p-5">
-                    <span class="text-xs font-bold px-2 py-1 rounded-full tag-food mb-2 inline-block">早餐</span>
-                    <h3 class="text-lg font-bold text-gray-800">金許園</h3>
-                </div>
-
-                <div class="macaron-card rounded-3xl p-5 relative overflow-hidden">
-                    <div class="flex justify-between items-start mb-2">
-                        <div class="space-x-1">
-                            <span class="text-xs font-bold px-2 py-1 rounded-full tag-spot">景點</span>
-                            <span class="text-xs font-bold px-2 py-1 rounded-full text-white badge-snap shadow-sm">#必拍</span>
-                        </div>
-                    </div>
-                    <h3 class="text-lg font-bold text-gray-800 mb-1">馬山觀測站、獅山砲陣地</h3>
-                    <div class="bg-gray-50 rounded-xl p-3 text-sm text-gray-700">
-                        🚗 <span class="font-bold text-blue-500">停車資訊：</span> 車子停在入口外停車場再步行進入。<br>
-                        💡 <span class="font-bold text-yellow-600">拍照小技巧：</span> 獅山砲陣地的砲操表演很震撼，記得提早卡位錄影。
-                    </div>
-                </div>
-
-                <div class="macaron-card rounded-3xl p-5">
-                    <span class="text-xs font-bold px-2 py-1 rounded-full tag-food mb-2 inline-block">午餐</span>
-                    <h3 class="text-lg font-bold text-gray-800">新天地海產店</h3>
-                </div>
-
                 <div class="macaron-card rounded-3xl p-5 relative overflow-hidden">
                     <div class="flex justify-between items-start mb-2">
                         <div class="space-x-1">
@@ -264,18 +170,7 @@
                         💡 <span class="font-bold text-yellow-600">拍照小技巧：</span> 這裡充滿中東廢墟風，找一面陽光打下來有陰影的牆，隨便擺個不看鏡頭的姿勢都像時尚大片！
                     </div>
                 </div>
-
-                <div class="macaron-card rounded-3xl p-5">
-                    <div class="flex justify-between items-start mb-2">
-                        <div class="space-x-1">
-                            <span class="text-xs font-bold px-2 py-1 rounded-full tag-food">下午茶</span>
-                            <span class="text-xs font-bold px-2 py-1 rounded-full text-white badge-buy shadow-sm">#必買</span>
-                        </div>
-                    </div>
-                    <h3 class="text-lg font-bold text-gray-800">愜意甜點工作室</h3>
-                    <p class="text-sm text-gray-600 mt-2">💡 隱藏在閩式古厝裡的法式甜點，吃完記得外帶一些當伴手禮！</p>
-                </div>
-
+                
                 <div class="macaron-card rounded-3xl p-5 relative overflow-hidden bg-gradient-to-r from-purple-50 to-pink-50 border-purple-100">
                     <div class="flex justify-between items-start mb-2">
                         <span class="text-xs font-bold px-2 py-1 rounded-full tag-transport"><i class="fa-solid fa-plane"></i> 返程</span>
@@ -284,21 +179,14 @@
                     <h3 class="text-lg font-bold text-gray-800 mb-1">B7-8962 金門 - 台中</h3>
                     <p class="text-sm text-gray-600">帶著滿滿回憶回家囉！ ✈️</p>
                 </div>
-
-                <div class="bg-green-50 rounded-2xl p-4 text-sm text-green-800 shadow-inner">
-                    <p class="mb-1">👗 <strong>建議穿著：</strong> 極度推薦「大地色系」或「民族風」服飾，去沙美摩洛哥拍照絕對無敵搭！</p>
-                    <p>☀️ <strong>天氣提示：</strong> 最後一天買伴手禮大包小包，注意別中暑，多喝水！</p>
-                </div>
             </div>
         </section>
     </main>
 
-    <!-- 浮動記帳按鈕 -->
     <button onclick="openBillModal()" class="fixed bottom-20 right-5 bg-gradient-to-r from-yellow-400 to-yellow-500 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg hover:shadow-xl transition-all z-40 transform hover:scale-105" title="記帳">
         <i class="fa-solid fa-file-invoice-dollar text-2xl"></i>
     </button>
 
-    <!-- 底部浮動導覽列 -->
     <nav class="fixed bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.1)] flex justify-around items-center p-3 z-30 border border-gray-100">
         <a href="#day1" class="flex flex-col items-center text-pink-400 hover:text-pink-600 transition-colors w-1/3">
             <i class="fa-solid fa-1 mb-1 text-lg"></i>
@@ -314,25 +202,21 @@
         </a>
     </nav>
 
-    <!-- 記帳分帳 Modal -->
     <div id="billModal" class="fixed inset-0 bg-black/40 z-50 hidden flex flex-col justify-end backdrop-blur-sm">
-        <div class="bg-white w-full rounded-t-3xl max-h-[85vh] flex flex-col modal-enter shadow-2xl">
-            <!-- Modal Header -->
-            <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-yellow-50 rounded-t-3xl">
+        <div class="bg-white w-full rounded-t-3xl max-h-[90vh] flex flex-col modal-enter shadow-2xl">
+            <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-yellow-50 rounded-t-3xl shrink-0">
                 <div>
-                    <h3 class="text-xl font-bold text-gray-800"><i class="fa-solid fa-calculator text-yellow-500 mr-2"></i>分帳小幫手</h3>
-                    <p class="text-xs text-gray-500 mt-1">Lin, Wu, Chen, Lee 專屬帳本</p>
+                    <h3 class="text-xl font-bold text-gray-800"><i class="fa-solid fa-calculator text-yellow-500 mr-2"></i>分帳小幫手 2.0</h3>
+                    <p class="text-xs text-gray-500 mt-1">精準算帳，感情不散</p>
                 </div>
                 <button onclick="closeBillModal()" class="w-8 h-8 bg-white rounded-full text-gray-400 hover:text-gray-600 shadow-sm flex items-center justify-center">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
             
-            <!-- Modal Body -->
             <div class="p-5 overflow-y-auto flex-1">
-                <!-- 輸入區 -->
                 <div class="bg-yellow-50/50 p-4 rounded-2xl mb-6 border border-yellow-100">
-                    <div class="flex gap-3 mb-3">
+                    <div class="flex gap-3 mb-4">
                         <div class="flex-1">
                             <label class="block text-xs text-gray-500 mb-1 font-bold">消費項目</label>
                             <input type="text" id="itemName" placeholder="例如：記德海鮮" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 transition-all">
@@ -342,34 +226,58 @@
                             <input type="number" id="itemAmount" placeholder="0" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 transition-all">
                         </div>
                     </div>
+
+                    <div class="mb-4">
+                        <label class="block text-xs text-gray-500 mb-2 font-bold">誰先墊款的？</label>
+                        <select id="itemPayer" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-yellow-400">
+                            <option value="Lin">Lin</option>
+                            <option value="Wu">Wu</option>
+                            <option value="Chen">Chen</option>
+                            <option value="Lee">Lee</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-xs text-gray-500 mb-2 font-bold">誰要分攤？ (可複選)</label>
+                        <div class="grid grid-cols-4 gap-2">
+                            <label class="custom-checkbox cursor-pointer text-center">
+                                <input type="checkbox" value="Lin" class="splitter-cb hidden" checked>
+                                <div class="border border-gray-200 rounded-lg py-1.5 text-xs text-gray-600 transition-colors">Lin</div>
+                            </label>
+                            <label class="custom-checkbox cursor-pointer text-center">
+                                <input type="checkbox" value="Wu" class="splitter-cb hidden" checked>
+                                <div class="border border-gray-200 rounded-lg py-1.5 text-xs text-gray-600 transition-colors">Wu</div>
+                            </label>
+                            <label class="custom-checkbox cursor-pointer text-center">
+                                <input type="checkbox" value="Chen" class="splitter-cb hidden" checked>
+                                <div class="border border-gray-200 rounded-lg py-1.5 text-xs text-gray-600 transition-colors">Chen</div>
+                            </label>
+                            <label class="custom-checkbox cursor-pointer text-center">
+                                <input type="checkbox" value="Lee" class="splitter-cb hidden" checked>
+                                <div class="border border-gray-200 rounded-lg py-1.5 text-xs text-gray-600 transition-colors">Lee</div>
+                            </label>
+                        </div>
+                    </div>
+
                     <button onclick="addExpense()" class="w-full bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 rounded-xl text-sm transition-colors shadow-sm">
                         <i class="fa-solid fa-plus mr-1"></i> 加入帳本
                     </button>
                 </div>
 
-                <!-- 帳目列表 -->
                 <h4 class="font-bold text-gray-700 mb-3 text-sm">消費明細</h4>
-                <ul id="expenseList" class="space-y-2 mb-6 min-h-[100px]">
-                    <!-- 動態生成明細 -->
+                <ul id="expenseList" class="space-y-2 mb-6 min-h-[50px]">
                     <li class="text-center text-gray-400 text-sm py-4" id="emptyState">目前還沒有消費紀錄喔！</li>
                 </ul>
 
-                <!-- 結算結果 -->
-                <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-gray-600 font-bold">總金額</span>
-                        <span class="text-xl font-bold text-gray-800" id="totalAmount">$0</span>
-                    </div>
-                    <div class="border-t border-gray-200 my-2"></div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-600 font-bold text-sm">每人應付 <span class="text-xs font-normal text-gray-400">(4人)</span></span>
-                        <span class="text-lg font-bold text-yellow-600" id="splitAmount">$0</span>
+                <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 mb-4">
+                    <h4 class="font-bold text-gray-700 mb-3 text-sm border-b border-gray-200 pb-2">財務結算表</h4>
+                    <div id="balanceList" class="space-y-2 text-sm">
+                        <div class="text-gray-400 text-center py-2">尚無結算資料</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Modal Footer -->
-            <div class="p-5 border-t border-gray-100 bg-white">
+            <div class="p-5 border-t border-gray-100 bg-white shrink-0">
                 <button onclick="copyToLine()" class="w-full bg-[#06C755] hover:bg-[#05b34c] text-white font-bold py-3 rounded-2xl text-base transition-colors shadow-md flex justify-center items-center">
                     <i class="fa-brands fa-line text-xl mr-2"></i> 複製結帳單到 LINE
                 </button>
@@ -377,120 +285,157 @@
         </div>
     </div>
 
-    <!-- 提示吐司 (Toast) -->
     <div id="toast" class="fixed top-10 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-full text-sm shadow-lg transition-opacity duration-300 opacity-0 pointer-events-none z-50">
         已複製到剪貼簿！
     </div>
 
     <script>
-        // 記帳資料
         let expenses = [];
         const members = ['Lin', 'Wu', 'Chen', 'Lee'];
 
-        // Modal 控制
         const modal = document.getElementById('billModal');
         
-        function openBillModal() {
-            modal.classList.remove('hidden');
-        }
+        function openBillModal() { modal.classList.remove('hidden'); }
+        function closeBillModal() { modal.classList.add('hidden'); }
 
-        function closeBillModal() {
-            modal.classList.add('hidden');
-        }
-
-        // 新增消費
         function addExpense() {
             const nameInput = document.getElementById('itemName');
             const amountInput = document.getElementById('itemAmount');
+            const payerInput = document.getElementById('itemPayer');
+            const splitterCbs = document.querySelectorAll('.splitter-cb:checked');
             
             const name = nameInput.value.trim();
-            const amount = parseInt(amountInput.value);
+            const amount = parseFloat(amountInput.value);
+            const payer = payerInput.value;
+            const splitters = Array.from(splitterCbs).map(cb => cb.value);
 
-            if (name && amount && amount > 0) {
-                expenses.push({ name, amount });
-                
-                // 清空輸入框
-                nameInput.value = '';
-                amountInput.value = '';
-                
-                updateUI();
-            } else {
+            if (!name || isNaN(amount) || amount <= 0) {
                 alert('請輸入完整的項目名稱與大於0的金額喔！');
+                return;
             }
+            if (splitters.length === 0) {
+                alert('至少要有一個人分攤這筆錢啦！');
+                return;
+            }
+
+            expenses.push({ name, amount, payer, splitters });
+            
+            nameInput.value = '';
+            amountInput.value = '';
+            
+            updateUI();
         }
 
-        // 刪除消費
         function removeExpense(index) {
             expenses.splice(index, 1);
             updateUI();
         }
 
-        // 更新介面
         function updateUI() {
             const listContainer = document.getElementById('expenseList');
-            const emptyState = document.getElementById('emptyState');
-            
-            let total = 0;
+            const balanceContainer = document.getElementById('balanceList');
             
             if (expenses.length === 0) {
                 listContainer.innerHTML = '<li class="text-center text-gray-400 text-sm py-4" id="emptyState">目前還沒有消費紀錄喔！</li>';
-            } else {
-                listContainer.innerHTML = '';
-                expenses.forEach((expense, index) => {
-                    total += expense.amount;
-                    const li = document.createElement('li');
-                    li.className = 'flex justify-between items-center bg-white p-3 rounded-xl border border-gray-100 shadow-sm';
-                    li.innerHTML = `
+                balanceContainer.innerHTML = '<div class="text-gray-400 text-center py-2">尚無結算資料</div>';
+                return;
+            } 
+            
+            // 更新明細列表
+            listContainer.innerHTML = '';
+            expenses.forEach((expense, index) => {
+                const li = document.createElement('li');
+                li.className = 'bg-white p-3 rounded-xl border border-gray-100 shadow-sm';
+                li.innerHTML = `
+                    <div class="flex justify-between items-center mb-1">
                         <span class="text-sm font-bold text-gray-700">${expense.name}</span>
                         <div class="flex items-center gap-3">
                             <span class="text-sm font-bold text-gray-800">$${expense.amount}</span>
                             <button onclick="removeExpense(${index})" class="text-gray-300 hover:text-red-400"><i class="fa-solid fa-trash-can text-xs"></i></button>
                         </div>
-                    `;
-                    listContainer.appendChild(li);
-                });
-            }
+                    </div>
+                    <div class="text-[10px] text-gray-400">
+                        ${expense.payer} 付款 ➡️ ${expense.splitters.join(', ')} 分攤
+                    </div>
+                `;
+                listContainer.appendChild(li);
+            });
 
-            // 更新總金額與分帳金額
-            document.getElementById('totalAmount').textContent = `$${total}`;
-            const split = Math.ceil(total / members.length); // 無條件進位避免少錢
-            document.getElementById('splitAmount').textContent = `$${split}`;
+            // 計算結算
+            let balances = { Lin: 0, Wu: 0, Chen: 0, Lee: 0 };
+            expenses.forEach(e => {
+                balances[e.payer] += e.amount; // 代墊者加錢
+                let splitAmount = e.amount / e.splitters.length;
+                e.splitters.forEach(s => {
+                    balances[s] -= splitAmount; // 分攤者扣錢
+                });
+            });
+
+            // 渲染結算結果
+            balanceContainer.innerHTML = '';
+            members.forEach(m => {
+                let b = Math.round(balances[m]);
+                if (b > 0) {
+                    balanceContainer.innerHTML += `
+                        <div class="flex justify-between items-center p-2 bg-green-50 rounded-lg">
+                            <span class="font-bold text-gray-700">${m}</span>
+                            <span class="text-green-600 font-bold">應收回 $${b}</span>
+                        </div>`;
+                } else if (b < 0) {
+                    balanceContainer.innerHTML += `
+                        <div class="flex justify-between items-center p-2 bg-red-50 rounded-lg">
+                            <span class="font-bold text-gray-700">${m}</span>
+                            <span class="text-red-500 font-bold">應補交 $${Math.abs(b)}</span>
+                        </div>`;
+                } else {
+                    balanceContainer.innerHTML += `
+                        <div class="flex justify-between items-center p-2 bg-gray-100 rounded-lg">
+                            <span class="font-bold text-gray-700">${m}</span>
+                            <span class="text-gray-500">不欠不收</span>
+                        </div>`;
+                }
+            });
         }
 
-        // 複製到 LINE
         function copyToLine() {
             if (expenses.length === 0) {
                 alert('帳本空空的，先記點東西吧！');
                 return;
             }
 
-            let total = 0;
             let text = "🏝️ 金門三天兩夜 結帳單 🏝️\n";
             text += "------------------------\n";
             
+            let balances = { Lin: 0, Wu: 0, Chen: 0, Lee: 0 };
+            
             expenses.forEach((e, i) => {
-                text += `${i+1}. ${e.name}: $${e.amount}\n`;
-                total += e.amount;
+                text += `${i+1}. ${e.name}: $${e.amount}\n   (墊款: ${e.payer} / 分攤: ${e.splitters.join(',')})\n`;
+                balances[e.payer] += e.amount;
+                let splitAmount = e.amount / e.splitters.length;
+                e.splitters.forEach(s => balances[s] -= splitAmount);
             });
             
             text += "------------------------\n";
-            text += `💰 總金額: $${total}\n`;
+            text += "📊 最終結算：\n";
             
-            const split = Math.ceil(total / members.length);
-            text += `👥 每人應付 (${members.join(', ')}): $${split}\n\n`;
-            text += "💳 麻煩各位老闆轉帳給我啦～感謝！🙏";
+            members.forEach(m => {
+                let b = Math.round(balances[m]);
+                if(b > 0) text += `🟢 ${m} 應收回: $${b}\n`;
+                if(b < 0) text += `🔴 ${m} 應補交: $${Math.abs(b)}\n`;
+                if(b === 0) text += `⚪ ${m} 不欠不收\n`;
+            });
+            
+            text += "\n💳 麻煩應補交的老闆們，轉帳給應收回的老闆喔！🙏";
 
-            // 複製到剪貼簿
             navigator.clipboard.writeText(text).then(() => {
                 showToast();
-                setTimeout(closeBillModal, 1500); // 複製完稍微等一下就自動關閉
+                setTimeout(closeBillModal, 1500);
             }).catch(err => {
                 console.error('複製失敗:', err);
                 alert('瀏覽器不支援自動複製，請手動圈選複製喔！');
             });
         }
 
-        // 顯示 Toast
         function showToast() {
             const toast = document.getElementById('toast');
             toast.classList.remove('opacity-0');
