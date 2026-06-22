@@ -446,5 +446,28 @@
             }, 2000);
         }
     </script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  // 👇 將你在步驟五取得的 Config 貼在下方取代這段
+  const firebaseConfig = {
+  apiKey: "AIzaSyDfn1IQ9tb5t81TUnCDenhQSdiQ0NEPHaY",
+  authDomain: "test0622-bd718.firebaseapp.com",
+  projectId: "test0622-bd718",
+  storageBucket: "test0622-bd718.firebasestorage.app",
+  messagingSenderId: "115029644585",
+  appId: "1:115029644585:web:437625bb536cb98d4e5338",
+  measurementId: "G-QN4HPQ62ZH"
+};
+
+  // 啟動 Firebase 魔法
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  
+  console.log("🔥 Firebase 資料庫連線成功！並且已經開啟測試模式讀寫權限！");
+</script>
+
+
 </body>
 </html>
