@@ -289,16 +289,48 @@
         已複製到剪貼簿！
     </div>
 
-    <script>
+   <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // 👇 這是你的專屬保險箱鑰匙
+        const firebaseConfig = {
+            apiKey: "AIzaSyDfn1IQ9tb5t81TUnCDenhQSdiQ0NEPHaY",
+            authDomain: "test0622-bd718.firebaseapp.com",
+            projectId: "test0622-bd718",
+            storageBucket: "test0622-bd718.firebasestorage.app",
+            messagingSenderId: "115029644585",
+            appId: "1:115029644585:web:437625bb536cb98d4e5338",
+            measurementId: "G-QN4HPQ62ZH"
+        };
+
+        // 啟動 Firebase 魔法
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const expensesCol = collection(db, "kinmen_expenses");
+        
+        console.log("🔥 Firebase 資料庫連線成功！");
+
         let expenses = [];
         const members = ['Lin', 'Wu', 'Chen', 'Lee'];
 
-        const modal = document.getElementById('billModal');
-        
-        function openBillModal() { modal.classList.remove('hidden'); }
-        function closeBillModal() { modal.classList.add('hidden'); }
+        // 【即時監聽雲端資料】
+        onSnapshot(expensesCol, (snapshot) => {
+            expenses = [];
+            snapshot.forEach((doc) => {
+                expenses.push({ id: doc.id, ...doc.data() });
+            });
+            expenses.sort((a, b) => a.timestamp - b.timestamp); // 依時間排序
+            updateUI(); // 資料一變，馬上更新畫面
+        });
 
-        function addExpense() {
+        // 為了讓 HTML 標籤抓得到模組內的函數，我們要把它綁定在 window 上
+        const modal = document.getElementById('billModal');
+        window.openBillModal = () => { modal.classList.remove('hidden'); }
+        window.closeBillModal = () => { modal.classList.add('hidden'); }
+
+        // 【新增消費：寫入保險箱】
+        window.addExpense = async () => {
             const nameInput = document.getElementById('itemName');
             const amountInput = document.getElementById('itemAmount');
             const payerInput = document.getElementById('itemPayer');
@@ -318,32 +350,47 @@
                 return;
             }
 
-            expenses.push({ name, amount, payer, splitters });
-            
-            nameInput.value = '';
-            amountInput.value = '';
-            
-            updateUI();
+            try {
+                // 將資料存入 Firebase
+                await addDoc(expensesCol, { 
+                    name: name, 
+                    amount: amount, 
+                    payer: payer, 
+                    splitters: splitters,
+                    timestamp: Date.now() 
+                });
+                nameInput.value = '';
+                amountInput.value = '';
+            } catch (error) {
+                console.error("寫入雲端失敗：", error);
+                alert("糟糕，記帳失敗了！確認一下網路連線喔！");
+            }
         }
 
-        function removeExpense(index) {
-            expenses.splice(index, 1);
-            updateUI();
+        // 【刪除消費：從保險箱拿出】
+        window.removeExpense = async (docId) => {
+            if(confirm('確定要刪除這筆帳目嗎？')) {
+                try {
+                    await deleteDoc(doc(db, "kinmen_expenses", docId));
+                } catch (error) {
+                    console.error("刪除失敗：", error);
+                }
+            }
         }
 
+        // 畫面更新邏輯 (維持你原本的設計不變)
         function updateUI() {
             const listContainer = document.getElementById('expenseList');
             const balanceContainer = document.getElementById('balanceList');
             
             if (expenses.length === 0) {
-                listContainer.innerHTML = '<li class="text-center text-gray-400 text-sm py-4" id="emptyState">目前還沒有消費紀錄喔！</li>';
+                listContainer.innerHTML = '<li class="text-center text-gray-400 text-sm py-4" id="emptyState">目前雲端還沒有消費紀錄喔！</li>';
                 balanceContainer.innerHTML = '<div class="text-gray-400 text-center py-2">尚無結算資料</div>';
                 return;
             } 
             
-            // 更新明細列表
             listContainer.innerHTML = '';
-            expenses.forEach((expense, index) => {
+            expenses.forEach((expense) => {
                 const li = document.createElement('li');
                 li.className = 'bg-white p-3 rounded-xl border border-gray-100 shadow-sm';
                 li.innerHTML = `
@@ -351,7 +398,9 @@
                         <span class="text-sm font-bold text-gray-700">${expense.name}</span>
                         <div class="flex items-center gap-3">
                             <span class="text-sm font-bold text-gray-800">$${expense.amount}</span>
-                            <button onclick="removeExpense(${index})" class="text-gray-300 hover:text-red-400"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                            <button onclick="removeExpense('${expense.id}')" class="text-gray-300 hover:text-red-400 transition-colors">
+                                <i class="fa-solid fa-trash-can text-xs"></i>
+                            </button>
                         </div>
                     </div>
                     <div class="text-[10px] text-gray-400">
@@ -361,17 +410,15 @@
                 listContainer.appendChild(li);
             });
 
-            // 計算結算
             let balances = { Lin: 0, Wu: 0, Chen: 0, Lee: 0 };
             expenses.forEach(e => {
-                balances[e.payer] += e.amount; // 代墊者加錢
+                balances[e.payer] += e.amount;
                 let splitAmount = e.amount / e.splitters.length;
                 e.splitters.forEach(s => {
-                    balances[s] -= splitAmount; // 分攤者扣錢
+                    balances[s] -= splitAmount;
                 });
             });
 
-            // 渲染結算結果
             balanceContainer.innerHTML = '';
             members.forEach(m => {
                 let b = Math.round(balances[m]);
@@ -397,9 +444,10 @@
             });
         }
 
-        function copyToLine() {
+        // 複製到 LINE (維持你原本的設計不變)
+        window.copyToLine = () => {
             if (expenses.length === 0) {
-                alert('帳本空空的，先記點東西吧！');
+                alert('雲端帳本空空的，先記點東西吧！');
                 return;
             }
 
@@ -428,45 +476,20 @@
             text += "\n💳 麻煩應補交的老闆們，轉帳給應收回的老闆喔！🙏";
 
             navigator.clipboard.writeText(text).then(() => {
-                showToast();
+                const toast = document.getElementById('toast');
+                toast.classList.remove('opacity-0');
+                toast.classList.add('opacity-100');
+                setTimeout(() => {
+                    toast.classList.remove('opacity-100');
+                    toast.classList.add('opacity-0');
+                }, 2000);
                 setTimeout(closeBillModal, 1500);
             }).catch(err => {
                 console.error('複製失敗:', err);
                 alert('瀏覽器不支援自動複製，請手動圈選複製喔！');
             });
         }
-
-        function showToast() {
-            const toast = document.getElementById('toast');
-            toast.classList.remove('opacity-0');
-            toast.classList.add('opacity-100');
-            setTimeout(() => {
-                toast.classList.remove('opacity-100');
-                toast.classList.add('opacity-0');
-            }, 2000);
-        }
     </script>
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-  // 👇 將你在步驟五取得的 Config 貼在下方取代這段
-  const firebaseConfig = {
-  apiKey: "AIzaSyDfn1IQ9tb5t81TUnCDenhQSdiQ0NEPHaY",
-  authDomain: "test0622-bd718.firebaseapp.com",
-  projectId: "test0622-bd718",
-  storageBucket: "test0622-bd718.firebasestorage.app",
-  messagingSenderId: "115029644585",
-  appId: "1:115029644585:web:437625bb536cb98d4e5338",
-  measurementId: "G-QN4HPQ62ZH"
-};
-
-  // 啟動 Firebase 魔法
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  
-  console.log("🔥 Firebase 資料庫連線成功！並且已經開啟測試模式讀寫權限！");
-</script>
 
 
 </body>
