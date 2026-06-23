@@ -49,9 +49,11 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
         import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
 
+        // 🎯 逸程，我直接幫你填好並補上最重要的 databaseURL 了！
         const firebaseConfig = {
             apiKey: "AIzaSyAQjI_sjBcvMV8t3X0QzCHXWE8GYGXM7Uo",
             authDomain: "kinmen0623.firebaseapp.com",
+            databaseURL: "https://kinmen0623-default-rtdb.firebaseio.com",
             projectId: "kinmen0623",
             storageBucket: "kinmen0623.firebasestorage.app",
             messagingSenderId: "994227158989",
@@ -264,7 +266,7 @@
                 <h3 class="text-md font-medium mb-2 pl-11 card-title">永春廣東粥</h3>
                 <div class="pl-11 flex flex-wrap gap-2 mb-3"><span class="px-2 py-1 bg-muji-tag text-xs rounded-full text-muji-accent card-category">食物</span><span class="px-2 py-1 bg-red-50 text-xs rounded-full text-muji-red font-medium card-tag">#必吃無米粥</span></div>
                 <div class="pl-11 text-sm bg-muji-bg rounded-xl p-3 text-gray-600 mt-2 card-tips-box">
-                    <p class="card-tip-photo"><i class="fa-regular fa-lightbulb text-muji-yellow mr-1"></i> 金門的廣東粥是熬到米粒全化掉的，配油條沾著吃絕配！</p>
+                    <p class="card-tip-photo"><i class="fa-regular fa-lightbulb text-muji-yellow mr-1"></i> 金門的廣東粥是熬到米粒全化掉的，配油條沾著吃一絕！</p>
                 </div>
             </div>
 
@@ -487,7 +489,7 @@
             </div>
             <div class="flex gap-3 pt-2">
                 <button onclick="closeEditModal()" class="flex-1 py-3 bg-muji-tag text-muji-accent rounded-xl text-sm">取消</button>
-                <button onclick="saveCardData()" class="flex-1 py-3 bg-muji-accent text-white rounded-xl font-bold text-sm">儲存修改</button>
+                <button onclick="saveCardData()" class="flex-1 py-3 bg-muji-accent text-white rounded-xl font-bold text-sm shadow-md">儲存修改</button>
             </div>
         </div>
     </div>
@@ -538,7 +540,7 @@
         });
 
         function initFirebaseSync() {
-            // 修正點：加上防錯機制，即使畫面找不到該卡片也不會造成 JS 卡死阻斷後續程式碼
+            // 雲端行程即時渲染
             document.querySelectorAll('[id^="item-"]').forEach(card => {
                 const cardId = card.id;
                 const cardRef = window.dbRef(window.firebaseDB, 'itinerary/' + cardId);
@@ -547,7 +549,7 @@
                 });
             });
 
-            // 正確監聽雲端記帳本 (這次絕對能順利執行！)
+            // 雲端記帳本完美全面監聽（補上 databaseURL 網址後，重整網頁立刻自動載入舊歷史數據）
             const expenseRef = window.dbRef(window.firebaseDB, 'expenses_list');
             window.dbOnValue(expenseRef, (snapshot) => {
                 let remoteExpenses = [];
