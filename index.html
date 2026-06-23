@@ -49,7 +49,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
         import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
 
-        // 🎯 逸程，我直接幫你填好並補上最重要的 databaseURL 了！
         const firebaseConfig = {
             apiKey: "AIzaSyAQjI_sjBcvMV8t3X0QzCHXWE8GYGXM7Uo",
             authDomain: "kinmen0623.firebaseapp.com",
@@ -61,13 +60,16 @@
             measurementId: "G-CQ0E52Y364"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        window.firebaseDB = db;
-        window.dbRef = ref;
-        window.dbSet = set;
-        window.dbOnValue = onValue;
+        try {
+            const app = initializeApp(firebaseConfig);
+            const db = getDatabase(app);
+            window.firebaseDB = db;
+            window.dbRef = ref;
+            window.dbSet = set;
+            window.dbOnValue = onValue;
+        } catch(e) {
+            console.log("Firebase 初始化暫緩，切換至強效本機雙備份防線模式。");
+        }
     </script>
 </head>
 <body class="text-muji-text antialiased max-w-md mx-auto relative min-h-screen">
@@ -75,7 +77,7 @@
     <header class="pt-8 pb-4 px-6 sticky top-0 bg-muji-bg/90 backdrop-blur-sm z-10 flex justify-between items-center">
         <div>
             <h1 class="text-2xl font-bold tracking-wider text-muji-accent">漫遊金門 🎒</h1>
-            <p class="text-sm text-gray-500 mt-1">三天兩夜 漫遊時光</p>
+            <p class="text-sm text-gray-500 mt-1">三天兩夜 放空時光</p>
         </div>
         <button onclick="toggleLedger()" class="bg-muji-accent text-white px-4 py-2 rounded-full text-xs font-bold shadow-md flex items-center gap-1">
             <i class="fa-solid fa-calculator"></i> 🪙 記帳/結算
@@ -118,7 +120,7 @@
                 </div>
             </div>
             
-            <button onclick="addExpense()" class="w-full py-2.5 bg-muji-green text-white rounded-xl font-bold text-xs shadow-sm">+ 新增這筆雲端消費</button>
+            <button onclick="addExpense()" class="w-full py-2.5 bg-muji-green text-white rounded-xl font-bold text-xs shadow-sm">+ 新增這筆消費</button>
             
             <div class="max-h-32 overflow-y-auto text-xs space-y-1.5 hide-scrollbar border-t border-b py-2 my-2">
                 <p class="text-gray-400 font-bold">消費明細：</p>
@@ -128,7 +130,7 @@
             <div class="bg-muji-bg rounded-2xl p-4 text-xs space-y-3">
                 <div class="font-bold text-gray-600 border-b border-gray-300 pb-1 flex justify-between">
                     <span>總花費總計: $<span id="total-spend">0</span></span>
-                    <span class="text-muji-accent font-bold">債務即時結算</span>
+                    <span class="text-muji-accent font-bold">雙重備份安全版</span>
                 </div>
                 <div class="bg-white/80 border border-muji-light p-3 rounded-xl space-y-1">
                     <p class="font-bold text-muji-accent"><i class="fa-solid fa-paper-plane"></i> 📲 懶人直接轉帳指令：</p>
@@ -531,6 +533,9 @@
         function toggleLedger() { document.getElementById('ledgerSection').classList.toggle('hidden'); }
 
         window.addEventListener('load', () => {
+            // 🚀 【終極大補帖】：優先從本地 LocalStorage 把歷史記帳紀錄挖出來載入畫面
+            loadLocalBackupExpenses();
+
             const checkTimer = setInterval(() => {
                 if (window.firebaseDB) {
                     clearInterval(checkTimer);
@@ -539,8 +544,18 @@
             }, 200);
         });
 
+        function loadLocalBackupExpenses() {
+            const localSaved = localStorage.getItem('kinmen_ledger_backup');
+            if (localSaved) {
+                const parsed = JSON.parse(localSaved);
+                window.currentExpenses = parsed;
+                calculateBill(parsed);
+                console.log("成功從本地安全防線防護區載入歷史數據！");
+            }
+        }
+
         function initFirebaseSync() {
-            // 雲端行程即時渲染
+            // 雲端行程同步
             document.querySelectorAll('[id^="item-"]').forEach(card => {
                 const cardId = card.id;
                 const cardRef = window.dbRef(window.firebaseDB, 'itinerary/' + cardId);
@@ -549,16 +564,16 @@
                 });
             });
 
-            // 雲端記帳本完美全面監聽（補上 databaseURL 網址後，重整網頁立刻自動載入舊歷史數據）
+            // 雲端記帳本同步
             const expenseRef = window.dbRef(window.firebaseDB, 'expenses_list');
             window.dbOnValue(expenseRef, (snapshot) => {
-                let remoteExpenses = [];
                 if (snapshot.exists()) {
                     const data = snapshot.val();
-                    remoteExpenses = Object.keys(data).map(key => data[key]);
+                    const remoteExpenses = Object.keys(data).map(key => data[key]);
+                    window.currentExpenses = remoteExpenses;
+                    localStorage.setItem('kinmen_ledger_backup', JSON.stringify(remoteExpenses)); // 雲端最新狀態同時鏡像備份到本地
+                    calculateBill(remoteExpenses);
                 }
-                window.currentExpenses = remoteExpenses;
-                calculateBill(remoteExpenses);
             });
         }
 
@@ -572,8 +587,12 @@
                 photo: document.getElementById('input-photo').value,
                 parking: document.getElementById('input-parking').value
             };
-            const cardRef = window.dbRef(window.firebaseDB, 'itinerary/' + cardId);
-            window.dbSet(cardRef, data);
+            if (window.firebaseDB) {
+                const cardRef = window.dbRef(window.firebaseDB, 'itinerary/' + cardId);
+                window.dbSet(cardRef, data);
+            } else {
+                updateCardUI(cardId, data);
+            }
             closeEditModal();
         }
 
@@ -624,8 +643,15 @@
             const list = window.currentExpenses ? [...window.currentExpenses] : [];
             list.push({ id: newId, item, amount, payer, sharers });
 
-            const expenseRef = window.dbRef(window.firebaseDB, 'expenses_list');
-            window.dbSet(expenseRef, list);
+            // 👑 雙軌寫入：立刻寫進瀏覽器快取 + Firebase 雲端
+            window.currentExpenses = list;
+            localStorage.setItem('kinmen_ledger_backup', JSON.stringify(list));
+            calculateBill(list);
+
+            if (window.firebaseDB) {
+                const expenseRef = window.dbRef(window.firebaseDB, 'expenses_list');
+                window.dbSet(expenseRef, list);
+            }
 
             itemInput.value = '';
             amountInput.value = '';
@@ -634,8 +660,14 @@
 
         function deleteExpense(id) {
             const list = (window.currentExpenses || []).filter(exp => exp.id !== id.toString());
-            const expenseRef = window.dbRef(window.firebaseDB, 'expenses_list');
-            window.dbSet(expenseRef, list);
+            window.currentExpenses = list;
+            localStorage.setItem('kinmen_ledger_backup', JSON.stringify(list));
+            calculateBill(list);
+
+            if (window.firebaseDB) {
+                const expenseRef = window.dbRef(window.firebaseDB, 'expenses_list');
+                window.dbSet(expenseRef, list);
+            }
         }
 
         function calculateBill(expenseArray) {
@@ -643,7 +675,7 @@
             let netBalances = { Lee: 0, Lin: 0, Song: 0, Wu: 0 };
 
             const listContainer = document.getElementById('expense-list');
-            listContainer.innerHTML = expenseArray.length === 0 ? '<p class="text-gray-400 italic">目前還沒有任何雲端消費紀錄。</p>' : '';
+            listContainer.innerHTML = expenseArray.length === 0 ? '<p class="text-gray-400 italic">目前還沒有任何消費紀錄。</p>' : '';
 
             expenseArray.forEach(exp => {
                 totalSpend += exp.amount;
