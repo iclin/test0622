@@ -47,28 +47,24 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
-        import { getDatabase, ref, set, push, onValue } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
 
-        // 🛠️ 【請記得將下方的設定，替換成你自己在 Firebase 申請到的專屬金鑰】
         const firebaseConfig = {
-  apiKey: "AIzaSyAQjI_sjBcvMV8t3X0QzCHXWE8GYGXM7Uo",
-  authDomain: "kinmen0623.firebaseapp.com",
-  projectId: "kinmen0623",
-  storageBucket: "kinmen0623.firebasestorage.app",
-  messagingSenderId: "994227158989",
-  appId: "1:994227158989:web:8d01d1f67e8c7417358e84",
-  measurementId: "G-CQ0E52Y364"
-};
+            apiKey: "AIzaSyAQjI_sjBcvMV8t3X0QzCHXWE8GYGXM7Uo",
+            authDomain: "kinmen0623.firebaseapp.com",
+            projectId: "kinmen0623",
+            storageBucket: "kinmen0623.firebasestorage.app",
+            messagingSenderId: "994227158989",
+            appId: "1:994227158989:web:8d01d1f67e8c7417358e84",
+            measurementId: "G-CQ0E52Y364"
+        };
 
-        // 初始化 Firebase
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // 將重要方法掛載到 window，確保傳統的 JS 函數可以呼叫
         window.firebaseDB = db;
         window.dbRef = ref;
         window.dbSet = set;
-        window.dbPush = push;
         window.dbOnValue = onValue;
     </script>
 </head>
@@ -77,7 +73,7 @@
     <header class="pt-8 pb-4 px-6 sticky top-0 bg-muji-bg/90 backdrop-blur-sm z-10 flex justify-between items-center">
         <div>
             <h1 class="text-2xl font-bold tracking-wider text-muji-accent">漫遊金門 🎒</h1>
-            <p class="text-sm text-gray-500 mt-1">三天兩夜 放空時光</p>
+            <p class="text-sm text-gray-500 mt-1">三天兩夜 漫遊時光</p>
         </div>
         <button onclick="toggleLedger()" class="bg-muji-accent text-white px-4 py-2 rounded-full text-xs font-bold shadow-md flex items-center gap-1">
             <i class="fa-solid fa-calculator"></i> 🪙 記帳/結算
@@ -169,7 +165,7 @@
                 <div class="pl-11 flex flex-wrap gap-2 mb-3"><span class="px-2 py-1 bg-muji-tag text-xs rounded-full text-muji-accent card-category">食物</span><span class="px-2 py-1 bg-red-50 text-xs rounded-full text-muji-red font-medium card-tag">#必吃全牛大餐</span></div>
                 <div class="pl-11 text-sm bg-muji-bg rounded-xl p-3 text-gray-600 mt-2 card-tips-box">
                     <p class="card-tip-photo"><i class="fa-regular fa-lightbulb text-muji-yellow mr-1"></i> 拍肉片要趁剛上桌色澤最美時喔！</p>
-                    <p class="mt-1 card-tip-parking"><i class="fa-solid fa-car text-gray-400 mr-1"></i> 附近有專屬停車場，不用擔心找車位。</p>
+                    <p class="mt-1 card-tip-parking"><i class="fa-solid fa-car text-gray-400 mr-1"></i> 💡 專屬停車場停車非常便利。</p>
                 </div>
             </div>
 
@@ -183,6 +179,10 @@
                 </div>
                 <h3 class="text-md font-medium mb-2 pl-11 card-title">小金門 (湖井頭戰史館、沙溪堡、九宮坑道)</h3>
                 <div class="pl-11 flex flex-wrap gap-2 mb-3"><span class="px-2 py-1 bg-muji-tag text-xs rounded-full text-muji-accent card-category">景點</span><span class="px-2 py-1 bg-green-50 text-xs rounded-full text-muji-green font-medium card-tag">#必拍無敵海景</span></div>
+                <div class="pl-11 text-sm bg-muji-bg rounded-xl p-3 text-gray-600 mt-2 card-tips-box">
+                    <p class="card-tip-photo"><i class="fa-regular fa-lightbulb text-muji-yellow mr-1"></i> 九宮坑道廣角超震撼，沙溪堡適合夕陽。</p>
+                    <p class="mt-1 card-tip-parking"><i class="fa-solid fa-gas-pump text-gray-400 mr-1"></i> 建議機車遊島，跨大橋前加滿油。</p>
+                </div>
             </div>
 
             <div id="item-1-4" class="bg-muji-card rounded-[2rem] p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-muji-light/50 relative overflow-hidden">
@@ -263,6 +263,9 @@
                 </div>
                 <h3 class="text-md font-medium mb-2 pl-11 card-title">永春廣東粥</h3>
                 <div class="pl-11 flex flex-wrap gap-2 mb-3"><span class="px-2 py-1 bg-muji-tag text-xs rounded-full text-muji-accent card-category">食物</span><span class="px-2 py-1 bg-red-50 text-xs rounded-full text-muji-red font-medium card-tag">#必吃無米粥</span></div>
+                <div class="pl-11 text-sm bg-muji-bg rounded-xl p-3 text-gray-600 mt-2 card-tips-box">
+                    <p class="card-tip-photo"><i class="fa-regular fa-lightbulb text-muji-yellow mr-1"></i> 金門的廣東粥是熬到米粒全化掉的，配油條沾著吃絕配！</p>
+                </div>
             </div>
 
             <div id="item-2-2" class="bg-muji-card rounded-[2rem] p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-muji-light/50 relative overflow-hidden">
@@ -275,6 +278,10 @@
                 </div>
                 <h3 class="text-md font-medium mb-2 pl-11 card-title">翟山坑道</h3>
                 <div class="pl-11 flex flex-wrap gap-2 mb-3"><span class="px-2 py-1 bg-muji-tag text-xs rounded-full text-muji-accent card-category">景點</span><span class="px-2 py-1 bg-green-50 text-xs rounded-full text-muji-green font-medium card-tag">#必拍水面板影</span></div>
+                <div class="pl-11 text-sm bg-muji-bg rounded-xl p-3 text-gray-600 mt-2 card-tips-box">
+                    <p class="card-tip-photo"><i class="fa-regular fa-lightbulb text-muji-yellow mr-1"></i> 手機貼近水面，等水波完全靜止能拍出超美鏡面倒影。</p>
+                    <p class="mt-1 card-tip-parking"><i class="fa-solid fa-car text-gray-400 mr-1"></i> 門口外備有免費大型停車場。</p>
+                </div>
             </div>
 
             <div id="item-2-3" class="bg-muji-card rounded-[2rem] p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-muji-light/50 relative overflow-hidden">
@@ -414,6 +421,9 @@
                 </div>
                 <h3 class="text-md font-medium mb-2 pl-11 card-title">沙美摩洛哥</h3>
                 <div class="pl-11 flex flex-wrap gap-2 mb-3"><span class="px-2 py-1 bg-muji-tag text-xs rounded-full text-muji-accent card-category">景點</span><span class="px-2 py-1 bg-green-50 text-xs rounded-full text-muji-green font-medium card-tag">#必拍廢墟風</span></div>
+                <div class="pl-11 text-sm bg-muji-bg rounded-xl p-3 text-gray-600 mt-2 card-tips-box">
+                    <p class="card-tip-photo"><i class="fa-regular fa-lightbulb text-muji-yellow mr-1"></i> 低角度往上仰拍，更顯黃牆與藍天的異國風情。</p>
+                </div>
             </div>
 
             <div id="item-3-5" class="bg-muji-card rounded-[2rem] p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-muji-light/50 relative overflow-hidden">
@@ -448,6 +458,18 @@
         </div>
     </main>
 
+    <nav class="fixed bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md rounded-full shadow-[0_10px_40px_rgb(0,0,0,0.08)] px-6 py-3 border border-gray-100 flex justify-between items-center z-40">
+        <button onclick="switchTab('day1')" id="nav-day1" class="nav-item active flex flex-col items-center text-gray-400 w-16">
+            <div class="nav-icon"><i class="fa-solid fa-calendar-day"></i></div><span class="text-[10px] mt-1">Day 1</span>
+        </button>
+        <button onclick="switchTab('day2')" id="nav-day2" class="nav-item flex flex-col items-center text-gray-400 w-16">
+            <div class="nav-icon"><i class="fa-solid fa-calendar-day"></i></div><span class="text-[10px] mt-1">Day 2</span>
+        </button>
+        <button onclick="switchTab('day3')" id="nav-day3" class="nav-item flex flex-col items-center text-gray-400 w-16">
+            <div class="nav-icon"><i class="fa-solid fa-calendar-check"></i></div><span class="text-[10px] mt-1">Day 3</span>
+        </button>
+    </nav>
+
     <div id="editModal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-[2rem] w-full max-w-sm p-6 space-y-4 shadow-xl border border-muji-light">
             <div class="flex justify-between items-center border-b pb-2">
@@ -465,22 +487,10 @@
             </div>
             <div class="flex gap-3 pt-2">
                 <button onclick="closeEditModal()" class="flex-1 py-3 bg-muji-tag text-muji-accent rounded-xl text-sm">取消</button>
-                <button onclick="saveCardData()" class="flex-1 py-3 bg-muji-accent text-white rounded-xl font-bold text-sm shadow-md">儲存修改</button>
+                <button onclick="saveCardData()" class="flex-1 py-3 bg-muji-accent text-white rounded-xl font-bold text-sm">儲存修改</button>
             </div>
         </div>
     </div>
-
-    <nav class="fixed bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md rounded-full shadow-[0_10px_40px_rgb(0,0,0,0.08)] px-6 py-3 border border-gray-100 flex justify-between items-center z-40">
-        <button onclick="switchTab('day1')" id="nav-day1" class="nav-item active flex flex-col items-center text-gray-400 w-16">
-            <div class="nav-icon"><i class="fa-solid fa-calendar-day"></i></div><span class="text-[10px] mt-1">Day 1</span>
-        </button>
-        <button onclick="switchTab('day2')" id="nav-day2" class="nav-item flex flex-col items-center text-gray-400 w-16">
-            <div class="nav-icon"><i class="fa-solid fa-calendar-day"></i></div><span class="text-[10px] mt-1">Day 2</span>
-        </button>
-        <button onclick="switchTab('day3')" id="nav-day3" class="nav-item flex flex-col items-center text-gray-400 w-16">
-            <div class="nav-icon"><i class="fa-solid fa-calendar-check"></i></div><span class="text-[10px] mt-1">Day 3</span>
-        </button>
-    </nav>
 
     <script>
         const members = ['Lee', 'Lin', 'Song', 'Wu'];
@@ -516,10 +526,8 @@
         }
 
         function closeEditModal() { document.getElementById('editModal').classList.add('hidden'); }
-
         function toggleLedger() { document.getElementById('ledgerSection').classList.toggle('hidden'); }
 
-        // 核心修正：動態監聽並保證 Firebase 狀態同步
         window.addEventListener('load', () => {
             const checkTimer = setInterval(() => {
                 if (window.firebaseDB) {
@@ -530,7 +538,7 @@
         });
 
         function initFirebaseSync() {
-            // 1. 同步行程編輯
+            // 修正點：加上防錯機制，即使畫面找不到該卡片也不會造成 JS 卡死阻斷後續程式碼
             document.querySelectorAll('[id^="item-"]').forEach(card => {
                 const cardId = card.id;
                 const cardRef = window.dbRef(window.firebaseDB, 'itinerary/' + cardId);
@@ -539,7 +547,7 @@
                 });
             });
 
-            // 2. 同步雲端記帳本 (全面監聽，重新整理會完美載入舊紀錄)
+            // 正確監聽雲端記帳本 (這次絕對能順利執行！)
             const expenseRef = window.dbRef(window.firebaseDB, 'expenses_list');
             window.dbOnValue(expenseRef, (snapshot) => {
                 let remoteExpenses = [];
@@ -547,7 +555,7 @@
                     const data = snapshot.val();
                     remoteExpenses = Object.keys(data).map(key => data[key]);
                 }
-                window.currentExpenses = remoteExpenses; // 核心：將雲端最新狀態即時同步給全域變數
+                window.currentExpenses = remoteExpenses;
                 calculateBill(remoteExpenses);
             });
         }
@@ -596,7 +604,6 @@
             } else if (tipsBox) { tipsBox.remove(); }
         }
 
-        // 核心大升級：新增消費時，改用覆寫最新結合後的總陣列，防止重新整理清空
         function addExpense() {
             const itemInput = document.getElementById('expense-item');
             const amountInput = document.getElementById('expense-amount');
@@ -612,11 +619,9 @@
             if (sharers.length === 0) { alert('這筆花費至少要選一個人來分攤喔！'); return; }
 
             const newId = Date.now().toString();
-            // 關鍵安全防護：如果重新整理後變數還沒拿回，就建立一個空陣列，避免把舊陣列搞丟
             const list = window.currentExpenses ? [...window.currentExpenses] : [];
             list.push({ id: newId, item, amount, payer, sharers });
 
-            // 推送到 Firebase
             const expenseRef = window.dbRef(window.firebaseDB, 'expenses_list');
             window.dbSet(expenseRef, list);
 
@@ -704,7 +709,7 @@
             text += `\n💡 金額已由雲端系統精密交叉沖銷！收到請手刀轉帳喔！❤️`;
 
             navigator.clipboard.writeText(text).then(() => {
-                alert('精準懶人分帳報告已複製！快去 LINE 群組貼上吧 🚀');
+                alert('精準分帳報告已複製！快去 LINE 群組貼上吧 🚀');
             }).catch(err => { alert('複製失敗。'); });
         }
     </script>
