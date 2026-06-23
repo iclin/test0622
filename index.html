@@ -47,9 +47,9 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
-        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
+        import { getDatabase, ref, set, push, onValue } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
 
-        // 🛠️ 【請將下方的設定，替換成你自己在 Firebase 申請到的 web app 金鑰】
+        // 🛠️ 【請記得將下方的設定，替換成你自己在 Firebase 申請到的專屬金鑰】
         const firebaseConfig = {
   apiKey: "AIzaSyAQjI_sjBcvMV8t3X0QzCHXWE8GYGXM7Uo",
   authDomain: "kinmen0623.firebaseapp.com",
@@ -64,10 +64,11 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // 將資料庫控制器綁定至 window，讓全網網頁函數皆可呼叫
+        // 將重要方法掛載到 window，確保傳統的 JS 函數可以呼叫
         window.firebaseDB = db;
         window.dbRef = ref;
         window.dbSet = set;
+        window.dbPush = push;
         window.dbOnValue = onValue;
     </script>
 </head>
@@ -76,7 +77,7 @@
     <header class="pt-8 pb-4 px-6 sticky top-0 bg-muji-bg/90 backdrop-blur-sm z-10 flex justify-between items-center">
         <div>
             <h1 class="text-2xl font-bold tracking-wider text-muji-accent">漫遊金門 🎒</h1>
-            <p class="text-sm text-gray-500 mt-1">三天兩夜 漫遊時光</p>
+            <p class="text-sm text-gray-500 mt-1">三天兩夜 放空時光</p>
         </div>
         <button onclick="toggleLedger()" class="bg-muji-accent text-white px-4 py-2 rounded-full text-xs font-bold shadow-md flex items-center gap-1">
             <i class="fa-solid fa-calculator"></i> 🪙 記帳/結算
@@ -109,7 +110,7 @@
                     </select>
                 </div>
                 <div class="col-span-2 bg-muji-bg p-3 rounded-2xl">
-                    <label class="block text-gray-500 mb-1.5 font-bold">這筆花費誰要分攤？</label>
+                    <label class="block text-gray-500 mb-1.5 font-bold">這筆花費誰要分攤？(可自訂)</label>
                     <div class="flex justify-between items-center px-1">
                         <label class="flex items-center gap-1.5 font-medium"><input type="checkbox" name="expense-share" value="Lee" checked class="rounded border-gray-300 text-muji-accent"> Lee</label>
                         <label class="flex items-center gap-1.5 font-medium"><input type="checkbox" name="expense-share" value="Lin" checked class="rounded border-gray-300 text-muji-accent"> Lin</label>
@@ -133,7 +134,9 @@
                 </div>
                 <div class="bg-white/80 border border-muji-light p-3 rounded-xl space-y-1">
                     <p class="font-bold text-muji-accent"><i class="fa-solid fa-paper-plane"></i> 📲 懶人直接轉帳指令：</p>
-                    <div id="transfer-instructions" class="space-y-1 text-gray-700 font-medium"></div>
+                    <div id="transfer-instructions" class="space-y-1 text-gray-700 font-medium">
+                        <p class="text-gray-400 italic">還沒有產生轉帳關係喔，請先記帳。</p>
+                    </div>
                 </div>
             </div>
             <button onclick="copyToLine()" class="w-full py-3 bg-[#06C755] text-white rounded-xl font-bold text-sm shadow-md flex items-center justify-center gap-2"><i class="fa-brands fa-line text-lg"></i> 複製分帳報告到 LINE</button>
@@ -445,6 +448,28 @@
         </div>
     </main>
 
+    <div id="editModal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-[2rem] w-full max-w-sm p-6 space-y-4 shadow-xl border border-muji-light">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-lg text-muji-accent"><i class="fa-solid fa-pen-to-square"></i> 調整行程</h3>
+                <button onclick="closeEditModal()" class="text-gray-400 text-xl">&times;</button>
+            </div>
+            <input type="hidden" id="edit-id">
+            <div class="space-y-3 text-sm">
+                <div><label class="block text-xs font-bold text-gray-400 mb-1">類型</label><input type="text" id="input-type" class="w-full bg-muji-bg p-2 rounded-xl border-none"></div>
+                <div><label class="block text-xs font-bold text-gray-400 mb-1">時間</label><input type="text" id="input-time" class="w-full bg-muji-bg p-2 rounded-xl border-none"></div>
+                <div><label class="block text-xs font-bold text-gray-400 mb-1">項目名稱</label><input type="text" id="input-title" class="w-full bg-muji-bg p-2 rounded-xl border-none font-medium"></div>
+                <div><label class="block text-xs font-bold text-gray-400 mb-1">精華標籤</label><input type="text" id="input-tag" class="w-full bg-muji-bg p-2 rounded-xl border-none"></div>
+                <div><label class="block text-xs font-bold text-gray-400 mb-1">💡 拍照秘笈</label><textarea id="input-photo" rows="2" class="w-full bg-muji-bg p-2 rounded-xl border-none"></textarea></div>
+                <div><label class="block text-xs font-bold text-gray-400 mb-1">🚗 停車資訊</label><textarea id="input-parking" rows="2" class="w-full bg-muji-bg p-2 rounded-xl border-none"></textarea></div>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button onclick="closeEditModal()" class="flex-1 py-3 bg-muji-tag text-muji-accent rounded-xl text-sm">取消</button>
+                <button onclick="saveCardData()" class="flex-1 py-3 bg-muji-accent text-white rounded-xl font-bold text-sm shadow-md">儲存修改</button>
+            </div>
+        </div>
+    </div>
+
     <nav class="fixed bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md rounded-full shadow-[0_10px_40px_rgb(0,0,0,0.08)] px-6 py-3 border border-gray-100 flex justify-between items-center z-40">
         <button onclick="switchTab('day1')" id="nav-day1" class="nav-item active flex flex-col items-center text-gray-400 w-16">
             <div class="nav-icon"><i class="fa-solid fa-calendar-day"></i></div><span class="text-[10px] mt-1">Day 1</span>
@@ -494,7 +519,7 @@
 
         function toggleLedger() { document.getElementById('ledgerSection').classList.toggle('hidden'); }
 
-        // 核心邏輯：監聽並渲染 Firebase 資料庫狀態
+        // 核心修正：動態監聽並保證 Firebase 狀態同步
         window.addEventListener('load', () => {
             const checkTimer = setInterval(() => {
                 if (window.firebaseDB) {
@@ -514,7 +539,7 @@
                 });
             });
 
-            // 2. 同步雲端記帳本
+            // 2. 同步雲端記帳本 (全面監聽，重新整理會完美載入舊紀錄)
             const expenseRef = window.dbRef(window.firebaseDB, 'expenses_list');
             window.dbOnValue(expenseRef, (snapshot) => {
                 let remoteExpenses = [];
@@ -522,7 +547,7 @@
                     const data = snapshot.val();
                     remoteExpenses = Object.keys(data).map(key => data[key]);
                 }
-                window.currentExpenses = remoteExpenses;
+                window.currentExpenses = remoteExpenses; // 核心：將雲端最新狀態即時同步給全域變數
                 calculateBill(remoteExpenses);
             });
         }
@@ -537,7 +562,6 @@
                 photo: document.getElementById('input-photo').value,
                 parking: document.getElementById('input-parking').value
             };
-            // 寫入雲端 Firebase
             const cardRef = window.dbRef(window.firebaseDB, 'itinerary/' + cardId);
             window.dbSet(cardRef, data);
             closeEditModal();
@@ -572,6 +596,7 @@
             } else if (tipsBox) { tipsBox.remove(); }
         }
 
+        // 核心大升級：新增消費時，改用覆寫最新結合後的總陣列，防止重新整理清空
         function addExpense() {
             const itemInput = document.getElementById('expense-item');
             const amountInput = document.getElementById('expense-amount');
@@ -587,7 +612,8 @@
             if (sharers.length === 0) { alert('這筆花費至少要選一個人來分攤喔！'); return; }
 
             const newId = Date.now().toString();
-            const list = window.currentExpenses || [];
+            // 關鍵安全防護：如果重新整理後變數還沒拿回，就建立一個空陣列，避免把舊陣列搞丟
+            const list = window.currentExpenses ? [...window.currentExpenses] : [];
             list.push({ id: newId, item, amount, payer, sharers });
 
             // 推送到 Firebase
